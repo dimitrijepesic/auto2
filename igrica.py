@@ -26,7 +26,6 @@ class Auto:
             angular_velocity = self.velocity.x / turning_radius
         else:
             angular_velocity = 0
-
         self.position += self.velocity.rotate(-self.angle) * dt
         self.angle += degrees(angular_velocity) * dt
 class Game:
@@ -80,26 +79,28 @@ class Game:
                 car.steering = 0
             car.steering = max(-car.max_steering, min(car.steering, car.max_steering))
             car.update(dt)
-            self.screen.fill((0, 0, 0))
+            self.screen.fill(pygame.Color('black'))
+            pygame.draw.rect(self.screen, pygame.Color('white'), (100,100,1080,520))
+            pygame.draw.rect(self.screen, pygame.Color('black'), (200,200,880,320))
             rotated = pygame.transform.rotate(car_image, car.angle)
             rect = rotated.get_rect()
             self.screen.blit(rotated, car.position * ppu -(rect.width / 2, rect.height / 2))
-            x = car.position[0]*ppu - rect.width / 2
-            y = car.position[1]*ppu - rect.height / 2
+            x = int(car.position[0]*ppu - rect.width / 2)
+            y = int(car.position[1]*ppu - rect.height / 2)
             a = car_image.get_width()
             b = car_image.get_height()
-            x1 = x + (a*cos(car.angle))
-            y1 = y - (b*sin(car.angle))
-            x2 = x + (a*sin(car.angle))
-            y2 = y + (b*cos(car.angle))
-            x3 = x2 + (a*cos(car.angle))
-            y3 = y2 - (b*sin(car.angle))
-            alfa = pygame.self.screen.get_at((x,y))
-            beta = pygame.self.screen.get_at((x1,y1))
-            gama = pygame.self.screen.get_at((x2,y2))
-            delta = pygame.self.screen.get_at((x3,y3))
+            x1 = int(x + (a*cos(car.angle)))
+            y1 = int(y - (b*sin(car.angle)))
+            x2 = int(x + (a*sin(car.angle)))
+            y2 = int(y + (b*cos(car.angle)))
+            x3 = int(x2 + (a*cos(car.angle)))
+            y3 = int(y2 - (b*sin(car.angle)))
+            alfa = self.screen.get_at((x,y))
+            beta = self.screen.get_at((x1,y1))
+            gama = self.screen.get_at((x2,y2))
+            delta = self.screen.get_at((x3,y3))
             if alfa != pygame.Color('white') or beta != pygame.Color('white') or gama != pygame.Color('white') or delta != pygame.Color('white'):
-                car = Car(20,18)
+                car = Auto(20,18)
             pygame.display.flip()
             self.clock.tick(self.ticks)
         pygame.quit()
